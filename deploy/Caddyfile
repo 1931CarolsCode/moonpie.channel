@@ -1,0 +1,23 @@
+# No unauthenticated localhost control API: local desktop users cannot reconfigure it.
+{
+	admin off
+}
+
+moonpie.channel {
+	root * /srv/www/moonpie/public
+	@private path /.git /.git/* /.env /.env.*
+	respond @private 404
+	header {
+		Cache-Control "no-cache, max-age=0, must-revalidate"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+	file_server
+	log {
+		output file /var/log/caddy/moonpie-access.log {
+			roll_size 10MiB
+			roll_keep 3
+		}
+	}
+}
